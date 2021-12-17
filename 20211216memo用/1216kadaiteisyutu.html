@@ -1,0 +1,94 @@
+<html><head>
+    <meta charset="UTF-8">
+    <title>myMemoPad</title>
+    <script src="js/jquery-2.1.3.min.js"></script>
+    <link rel="stylesheet">
+    <title>ToDoリスト</title>
+    </head>
+    <body>
+    <header>
+    <h1>ToDoリスト</h1>
+    <p id="test-text"></p>
+    <button onclick="showDate()">本日の日付を表示</button>
+    <h5>※優先度ランク(A,B,C)</h5>
+    </header>
+
+    <div>
+        <button id="add">追加</button>
+        <button id="save">Save</button>
+        <button id="clear">Clear</button>
+    </div>
+    <div id="target">
+        <div>
+            <select>
+                <option>A</option>
+                <option>B</option>
+                <option>C</option>
+            </select>
+            <input type="text" id= "memo">
+            <input type="radio" name="yn" value="完了" checked="checked">完了
+            <input type="radio" name="yn" value="未完了">未完了
+            <button onclick="removeExample(this)">削除</button>
+        </div>
+    </div>
+    <table id="list">
+        <!-- ここに追加データが挿入される -->
+        </table>
+    <script type="text/javascript">
+        
+        let cnt = 1;
+        const btn = document.getElementById("add");
+        
+        function addExample() {
+            ++cnt;
+            let elements = document.getElementById("target");
+            let copied = elements.lastElementChild.cloneNode(true);
+            
+            // セレクトメニューの値をコピー
+            let val = elements.lastElementChild.firstElementChild.selectedIndex;
+            copied.firstElementChild.selectedIndex = val;
+            
+            // コピー先ラジオボタンのname属性を編集
+            copied.children[3].setAttribute("name", "yn" + cnt);
+            copied.children[4].setAttribute("name", "yn" + cnt);
+            
+            elements.appendChild(copied);
+        }
+        
+        btn.addEventListener("click", addExample, false);
+        
+        function removeExample(button) {
+            if (window.confirm('本当に削除しますか？')) {
+                let parent = button.parentNode;
+                parent.remove();
+            }
+        }
+        function showDate() {
+        const text = document.getElementById("test-text")
+        const today = new Date()
+        const days = ["日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"]
+        const date = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日（${days[today.getDay()]}）`
+        text.innerText = date
+        }
+        //1.Save クリックイベント
+        // セーブをクリックしたときにfunctionが実行される
+        $("#save").on("click",function(){
+        // idのtargetに定数a1を定義している
+        const a1 = $("#target").val();
+        // ブラウザ上にvalueを保存する
+        localStorage.setItem(a1);
+        });
+        // クリアをクリックしたときにローカルストレージとメモリストが消去される
+        $("#clear").on("click",function(){
+        localStorage.clear();
+        $("#list").empty();
+        });
+        // 繰り返し処理でリロードした際にローカルストレージにある個数分リストに追加する
+        for(let i=0; i<localStorage.length; i++){
+        const value = localStorage.getItem(a1);
+        const html=value;
+        $("#list").append(html);
+        };
+    </script>
+
+</body></html>
